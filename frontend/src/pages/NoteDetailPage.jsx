@@ -42,7 +42,25 @@ const NoteDetailPage = () => {
       toast.error("Failed to delete note!");
     }
   };
-  const handleSave = () => {};
+  const handleSave = async () => {
+    if (!note.title.trim() || !note.content.trim()) {
+      toast.error("Please add a title or content");
+      return;
+    }
+
+    setIsSaving(true);
+
+    try {
+      await api.put(`/notes/${id}`, note);
+      toast.success("Note updated successfully!");
+      navigate("/");
+    } catch (error) {
+      console.error("Error saving the note: ", error);
+      toast.error("Fail to update note");
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   if (isLoading) {
     return (
